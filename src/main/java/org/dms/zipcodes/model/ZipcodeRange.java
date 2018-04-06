@@ -2,6 +2,9 @@ package org.dms.zipcodes.model;
 
 import java.util.Objects;
 
+/**
+ * Represents a USPS zipcode range
+ */
 public class ZipcodeRange {
 
   private Zipcode from;
@@ -11,6 +14,10 @@ public class ZipcodeRange {
     this(new Zipcode(from), new Zipcode(to));
   }
   
+  /**
+   * @throws NullPointerException on null from or to
+   * @throws IllegalArgumentException on invalid zipcode range
+   */
   public ZipcodeRange(Zipcode from, Zipcode to) {
     if (from == null || to == null) {
       throw new NullPointerException("from and to must not be null");
@@ -30,6 +37,9 @@ public class ZipcodeRange {
     return to;
   }
   
+  /**
+   * @throws IllegalArgumentException if from produces an invalid range
+   */
   public void setFrom(Zipcode from) {
     if (from == null) {
       throw new NullPointerException();
@@ -43,6 +53,9 @@ public class ZipcodeRange {
     setFrom(new Zipcode(from));
   }
 
+  /**
+   * @throws IllegalArgumentException if to produces an invalid range
+   */
   public void setTo(Zipcode to) {
     if (to == null) {
       throw new NullPointerException();

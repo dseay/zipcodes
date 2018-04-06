@@ -2,6 +2,9 @@ package org.dms.zipcodes.model;
 
 import java.util.Objects;
 
+/**
+ * Represents an immutable USPS zipcode
+ */
 public class Zipcode {
 
   private final int value;
