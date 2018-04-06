@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.dms</groupId>
   <artifactId>zipcodes</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1-SNAPSHOT</version>
   <name>Zipcode Services</name>
   <description>Given arbitrary set of possibly overlapping zipcode ranges computes the minimum set of ranges.</description>
   
