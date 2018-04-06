@@ -4,9 +4,10 @@ import static org.fest.assertions.api.Assertions.assertThat;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import org.dms.zipcodes.model.ZipcodeRange;
 import org.junit.Before;
@@ -151,7 +152,7 @@ public class ZipcodeSerivceImplTest {
   
   @Test
   public void testRandomListsOfRanges() {
-    int iterations = 25;
+    int iterations = 20;
     for (int nbrOfRanges = 10; nbrOfRanges <= 100; nbrOfRanges+=5) {
       for (int maxSizeOfRange = 2; maxSizeOfRange <= 100; maxSizeOfRange+=5) {
         testRanges(iterations, nbrOfRanges, maxSizeOfRange);
@@ -161,27 +162,53 @@ public class ZipcodeSerivceImplTest {
   
   @Test
   public void miniLoadTest() {
-    testRanges(5000, 100, 10);
+    testRanges(3000, 100, 10);
   }
   
   private void testRanges(int iterations, int nbrOfRanges, int maxSizeOfRange) {
-    List<ZipcodeRange> ranges;
+    List<ZipcodeRange> orig, minimal;
     for (int i = 0; i < iterations; i++) {
-      ranges = service.computeMinimumRanges(buildRandomRanges(nbrOfRanges, maxSizeOfRange));
-      assertThat(isOverlap(ranges)).isFalse();
+      orig = buildRandomRanges(nbrOfRanges, maxSizeOfRange);
+      minimal = service.computeMinimumRanges(orig);
+      assertThat(isOverlap(minimal)).isFalse();
+      assertThat(burtFoceCheckSameCoverage(orig, minimal)).isTrue();
     }    
   }
 
+  /* 
+   * Will build a hashset of all the covered zipcodes in the minimal set then
+   * check that each of the zipcodes in each range of the orig is covered
+   */
+  private boolean burtFoceCheckSameCoverage(List<ZipcodeRange> orig, List<ZipcodeRange> minimal) {
+    Set<Integer> origCoverage = buildCoverageSet(orig);
+    Set<Integer> minCoverage = buildCoverageSet(orig);
+    if (origCoverage.size() != minCoverage.size()) {    
+      return false;
+    }
+    
+    for (int zip : origCoverage) {
+      if (!minCoverage.contains(zip)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  private Set<Integer> buildCoverageSet(List<ZipcodeRange> ranges) {
+    Set<Integer> coverage = new HashSet<>();
+    for (ZipcodeRange range : ranges) {
+      for (int zip = range.getFrom().getValue(); zip <= range.getTo().getValue(); zip++) {
+        coverage.add(zip);
+      }
+    }
+    return coverage;
+  }
+  
   /**
    * @return true if there is no over lap in the set of ranges
    */
   private boolean isOverlap(List<ZipcodeRange> ranges) {
-    Collections.sort(ranges, new Comparator<ZipcodeRange>() {
-      @Override
-      public int compare(ZipcodeRange z1, ZipcodeRange z2) {
-        return z1.getFrom().getValue() - z2.getFrom().getValue();
-      }
-    });
+    Collections.sort(ranges);
     // now that ranges are sorted we should iterate over each range and the from and to should always be increasing
     int start = ranges.get(0).getTo().getValue();
     for (int i = 1; i < ranges.size(); i++) {

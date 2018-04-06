@@ -3,9 +3,10 @@ package org.dms.zipcodes.model;
 import java.util.Objects;
 
 /**
- * Represents a USPS zipcode range
+ * Represents a USPS zipcode range, natural ordering will be based on from zipcode then to zipcode
+ * 
  */
-public class ZipcodeRange {
+public class ZipcodeRange implements Comparable<ZipcodeRange> {
 
   private Zipcode from;
   private Zipcode to;
@@ -125,6 +126,15 @@ public class ZipcodeRange {
   @Override
   public String toString() {
     return from.toString() + " ... " + to.toString();
+  }
+
+  @Override
+  public int compareTo(ZipcodeRange other) {    
+    if (this.from.getValue() == other.from.getValue()) {
+      return this.to.compareTo(other.to);      
+    } else {
+      return this.from.compareTo(other.from);
+    }
   }
   
 }

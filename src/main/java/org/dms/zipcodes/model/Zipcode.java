@@ -5,7 +5,7 @@ import java.util.Objects;
 /**
  * Represents an immutable USPS zipcode
  */
-public class Zipcode {
+public class Zipcode implements Comparable<Zipcode> {
 
   private final int value;
 
@@ -37,5 +37,10 @@ public class Zipcode {
   @Override
   public String toString() {
     return String.format("%05d", value);
+  }
+
+  @Override
+  public int compareTo(Zipcode other) {
+    return this.value - other.value;
   }
 }

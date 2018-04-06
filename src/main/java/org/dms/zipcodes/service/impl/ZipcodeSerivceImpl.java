@@ -3,7 +3,6 @@ package org.dms.zipcodes.service.impl;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import org.dms.zipcodes.model.ZipcodeRange;
@@ -37,15 +36,10 @@ public class ZipcodeSerivceImpl implements ZipcodeService {
     } else if (ranges.size() == 1) {
       return ranges;
     }
-    
-    // sort ranges based on from zipcode so adjacent ranges are easy to find
-    ranges = new ArrayList<>(ranges); // first copy so as not to change order on caller and in case provided an immutable list
-    Collections.sort(ranges, new Comparator<ZipcodeRange>() {
-      @Override
-      public int compare(ZipcodeRange z1, ZipcodeRange z2) {
-        return z1.getFrom().getValue() - z2.getFrom().getValue();
-      }
-    });
+    // make copy of ranges so as not to change order on caller and in case provided an immutable list
+    ranges = new ArrayList<>(ranges); 
+    // sort ranges will produce listing of from zipcode in ascending order with smaller ranges first
+    Collections.sort(ranges);
     // implement algorithm
     List<ZipcodeRange> results = new ArrayList<>();
     for (ZipcodeRange range : ranges) {

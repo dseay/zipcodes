@@ -10,7 +10,7 @@ import org.dms.zipcodes.model.ZipcodeRange;
 public interface ZipcodeService {
 
   /**
-   * Will take any lists of zipcode ranges and produce the minimal set of ranges
+   * Will take any list of zipcode ranges and produce the minimal set of ranges
    * 
    * @param ranges list zipcode ranges
    * @return minimal set of zipcode ranges
