@@ -109,12 +109,10 @@ public class ZipcodeSerivceImplTest {
   }
   
   /**
-   * test multiple minimum sized adjacent ranges
+   * test multiple minimum sized adjacent ranges with duplicates
    */
   @Test
   public void testMultipleMinSizeRanges() {
-    
-    // ordered randomly with duplicates
     assertThat(service.computeMinimumRanges(range(3,3), range(3,3), range(1,1), range(4,4), range(2,2), range(1,1), range(2,2)))
       .hasSize(1)
       .contains(range(1,4));
@@ -139,16 +137,6 @@ public class ZipcodeSerivceImplTest {
     List<ZipcodeRange> ranges = Collections.emptyList();
     assertThat(service.computeMinimumRanges(ranges)).isEmpty();
   }  
-
-  @Test
-  public void miniRandomLists() {
-    int iterations = 5000, nbrOfRanges = 100, maxSizeOfRange = 10;
-    List<ZipcodeRange> ranges;
-    for (int i = 0; i < iterations; i++) {
-      ranges = service.computeMinimumRanges(buildRandomRanges(nbrOfRanges, maxSizeOfRange));
-      assertThat(isOverlap(ranges)).isFalse();
-    }
-  }
   
   @Test
   public void testRandomListsOfRanges() {
@@ -159,11 +147,6 @@ public class ZipcodeSerivceImplTest {
       }      
     }
   }  
-  
-  @Test
-  public void miniLoadTest() {
-    testRanges(3000, 100, 10);
-  }
   
   private void testRanges(int iterations, int nbrOfRanges, int maxSizeOfRange) {
     List<ZipcodeRange> orig, minimal;
